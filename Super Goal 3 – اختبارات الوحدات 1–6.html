@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Super Goal 3 – اختبارات تفاعلية</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f6f1e7;--card:#fffdf8;--ink:#1d2b24;--mut:#6b756f;--g:#0f5b3f;--gold:#c8962e;--ok:#1f8a4c;--okb:#dff3e6;--no:#b3392f;--nob:#fbe3e0;--ln:#e3dac6}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121a16;--card:#1b2620;--ink:#eef2ee;--mut:#9aa8a0;--g:#4fb98a;--gold:#e2b04a;--ok:#5fd18e;--okb:#16372a;--no:#ff8a7e;--nob:#3b1f1c;--ln:#2d3c33}}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic",system-ui,sans-serif;line-height:1.5;min-height:100%}
+.wrap{max-width:640px;margin:0 auto;padding:18px 16px 40px}
+h1{font-family:Georgia,"Times New Roman",serif;font-size:1.7rem;margin:4px 0 2px;color:var(--g);letter-spacing:.2px}
+.sub{color:var(--mut);margin:0 0 16px;font-size:.95rem}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.u{display:block;text-align:left;direction:ltr;background:var(--card);border:1.5px solid var(--ln);border-radius:14px;padding:12px 14px;cursor:pointer;color:var(--ink);font:inherit}
+.u b{display:block;font-family:Georgia,serif;font-size:1.5rem;color:var(--gold);line-height:1}
+.u span{font-size:.95rem;font-weight:600}
+.u:active,.u:hover{border-color:var(--g)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px}
+.tab,.btn{font:inherit;border:1.5px solid var(--g);background:transparent;color:var(--g);border-radius:999px;padding:8px 14px;cursor:pointer;font-weight:600}
+.tab[aria-pressed=true],.btn.p{background:var(--g);color:var(--bg)}
+.back{background:none;border:0;color:var(--g);font:inherit;font-weight:600;cursor:pointer;padding:4px 0}
+.bar{height:6px;background:var(--ln);border-radius:9px;overflow:hidden;margin:6px 0 14px}
+.bar i{display:block;height:100%;background:var(--gold);width:0;transition:width .3s}
+.meta{display:flex;justify-content:space-between;color:var(--mut);font-size:.85rem}
+.q{direction:ltr;text-align:left;font-size:1.2rem;font-weight:600;margin:10px 0 14px;font-family:Georgia,serif}
+.o{direction:ltr;text-align:left;display:block;width:100%;margin:0 0 10px;padding:13px 14px;border-radius:12px;border:1.5px solid var(--ln);background:var(--card);color:var(--ink);font:inherit;font-size:1.05rem;cursor:pointer}
+.o:hover{border-color:var(--g)}
+.o.ok{background:var(--okb);border-color:var(--ok)}
+.o.no{background:var(--nob);border-color:var(--no)}
+.fb{min-height:1.6em;font-weight:700;margin:4px 0 10px}
+.res{text-align:center;padding:24px 8px}
+.big{font-family:Georgia,serif;font-size:3.2rem;color:var(--g);margin:6px 0}
+.hide{display:none}
+.tag{display:inline-block;font-size:.75rem;background:var(--okb);color:var(--ok);border-radius:6px;padding:1px 8px;margin-inline-end:6px}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+// صيغة السؤال: السؤال | الإجابة الصحيحة | خطأ 1 | خطأ 2
+var D={
+1:{t:"Lifestyles",
+W:`She is a health food fanatic. She ___ eats meat.|hardly ever|always|usually
+Which expression means 0% of the time?|never|seldom|rarely
+Which expression means 100% of the time?|all the time|now and then|once in a while
+“Seldom” is closest in meaning to:|rarely|always|frequently
+Arthur goes rock climbing “from time to time”. This means he goes:|sometimes|every day|never
+Which word means “often”?|frequently|occasionally|hardly ever
+John hates exercise. He ___ goes to the gym.|never|always|regularly
+Josh checks his phone all the time. He is an Internet ___.|addict|fanatic|freak`,
+R:`“exercise freak” means:|someone who exercises a lot|someone who hates sports|a gym teacher
+“Exercise turns me off” means exercise ___ me.|doesn’t interest|excites|tires
+“Anyway” is used to:|change the topic|say goodbye|ask for help
+“You see” is used to introduce:|an explanation|a question|a refusal`,
+G:`Maha usually ___ tea instead of coffee.|drinks|drink|drinking
+Choose the correct sentence.|He is always late.|He always is late.|Always he is late.
+How ___ do you go to the gym?|often|many|long
+How ___ time do you spend on the Internet?|much|many|often
+___ of them is a math teacher. (two people, negative)|Neither|None|Both
+___ of the three girls are vegetarians. (zero girls)|None|Neither|Both
+Noura and Maha are both teachers. They are ___ teachers.|both|neither|none
+Neither of them ___ math.|teaches|teach|teaching
+Ibrahim ___ talks on the phone. (rarely)|rarely|rare|is rarely
+I eat a pizza ___ . (1%–19% of the time)|once in a while|all the time|usually`},
+2:{t:"Life Stories",
+W:`Trent ___ blood for the 100th time.|donated|donating|donate
+Donating blood is a way of ___ others.|helping|asking|ignoring
+One blood donation can save up to ___ lives.|three|ten|thirty
+Ahmed received the “Athlete of the Year” ___.|award|disease|clinic
+Ahmed was born with a ___ disease that made walking difficult.|crippling|outstanding|local
+“Congratulations!” is said when someone:|achieves something|is sick|is late`,
+R:`“to turn up” means:|to appear unexpectedly|to raise the volume|to refuse
+“to be into something” means:|to be interested in it|to be inside it|to dislike it
+“big break” means:|important opportunity|long vacation|broken bone
+“What about…?” is used to:|introduce a new topic|end a talk|say sorry`,
+G:`Did you ___ in Riyadh?|live|lived|living
+I ___ in Syria.|was born|am born|born
+When I was little, I ___ play with toys.|used to|use to|was used
+Did you ___ play video games?|use to|used to|using to
+Michael ___ in Montreal. (raise – passive)|was raised|raised|is raising
+The twins ___ born on June 21st.|were|was|are
+We went to the beach two days ___.|ago|last|yesterday
+I saw him ___ night.|last|ago|yesterday
+The Kingdom was founded ___ 1932.|in|on|at
+I woke up ___ 6 a.m.|at|in|on`},
+3:{t:"When Are You Traveling?",
+W:`“Passengers, please proceed to ___ C10.”|gate|carry-on|passport
+“May I see your ticket and ___, please?”|passport|suitcase|gate
+A small bag you take onto the plane is a ___.|carry-on|gate|flight
+“How many bags are you ___?”|checking|boarding|surfing
+“Flight 621 is now ___.”|boarding|checking|studying
+An exchange student goes abroad to ___.|study|surf|shop`,
+R:`“kind of” means:|slightly|very|never
+“pretty good” means:|quite good|not good|beautiful
+“pick up” (a language) means:|learn|lift|forget`,
+G:`My friends ___ tomorrow. (arrangement)|are arriving|were arriving|arrived
+What are you ___ tonight?|doing|do|did
+I ___ travel to Europe. (a plan)|’m going to|will going|go to
+Maybe I ___ stay with friends.|’ll|’m going|am
+I’m going to KSA ___ visit relatives.|to|for|and
+As soon as we ___, we’re going to the hotel.|arrive|will arrive|arrived
+He’ll go shopping while you ___ dinner.|cook|will cook|cooked
+She walked ___ the street to the other side.|across|through|out of
+I probably ___ stay in a hotel.|won’t|don’t|am not
+Take your passport ___ you leave for the airport.|before|until|while`},
+4:{t:"What Do I Need to Buy?",
+W:`Milk, butter and cheese are ___ products.|dairy|grain|seafood
+Salmon, shrimp and squid are ___.|seafood|vegetables|dairy
+Mango, papaya and pineapple are ___.|fruit|meat|oils
+Twelve eggs are a ___ of eggs.|dozen|kilogram|carton
+Olive oil and corn oil are ___.|oils|drinks|grains
+Beef, lamb and sausage are ___.|meat|bread|fruit`,
+R:`“you guys” means:|you (informal, plural)|your guys|my friends only
+“I can’t wait.” means:|I am very eager|I am tired|I won’t wait
+“Everything’s under control.” means:|Everything is organized|Everything is broken|Nothing is ready
+“I’ve had more than enough.” means:|I can’t eat any more|I’m still hungry|I want more`,
+G:`How ___ milk do you drink?|much|many|few
+How ___ bananas do you eat?|many|much|little
+I eat a ___ seafood.|little|few|many
+I eat a ___ carrots.|few|little|much
+The fridge is empty. There is ___ to eat.|nothing|anything|something
+I don’t have ___ for lunch.|anything|nothing|something
+Nawal cut ___ while peeling potatoes.|herself|himself|itself
+We made the cake by ___.|ourselves|ourself|us
+We had nothing at home, ___ we went out.|so|because|but
+She bought four pizzas ___ they were on sale.|because|so|but
+First, mix the flour. ___ add a little butter.|Then|Finally|Because`},
+5:{t:"Since When?",
+W:`Johannes Gutenberg invented the printing ___.|press|stove|camera
+Digital photography started with the digital ___.|camera|oven|printer
+Laptops now have more ___ and are lighter.|features|surveys|dozens
+A new way of doing something is a ___.|technique|chant|fare
+Printing “has been around” since 1440. “Around” means:|existed|moved|surrounded`,
+R:`“Long time no see.” means:|I haven’t seen you for a long time|Goodbye|I can’t see you
+“What have you been up to?” means:|What are you doing these days?|Where are you going?|Who are you?
+“settle down” means:|get married|sit down|calm down
+“Congratulations!” is a response to:|good news|bad news|a question`,
+G:`Have you ever ___ to France?|been|was|being
+I ___ there two years ago.|was|have been|have
+I’ve lived here ___ several years.|for|since|ago
+I’ve had my laptop ___ last June.|since|for|ago
+How ___ have you played football?|long|often|many
+She ___ studied English since third grade.|has|have|is
+The telephone ___ by Alexander Graham Bell.|was invented|invented|is invented
+The Internet ___ by millions of people.|is used|was used|uses
+Our lives ___ by technology.|have been changed|were changed|has changed
+The window ___. (someone broke it – agent not needed)|has been broken|has broken|is breaking`},
+6:{t:"Do You Know Where It Is?",
+W:`Bullet trains are very ___ and punctual.|efficient|crowded|noisy
+A safe city has a low ___ rate.|crime|fare|quality
+The price of a train or bus ticket is a ___.|fare|crime|suburb
+Going to college or work regularly is ___.|commuting|renovating|cycling
+“Quality of life” means how ___ life is in a place.|good|long|fast`,
+R:`“a bit” means:|a little|a lot|a bite
+“run down” means:|in need of fixing|very fast|brand new
+“Definitely!” shows:|strong agreement|doubt|refusal
+“You can’t have it all.” means:|everything has something negative|you can have everything|nobody wins
+“The only thing is that…” introduces:|a problem|a greeting|an invitation`,
+G:`Trains are ___ than buses.|faster|more fast|fastest
+Planes are ___ means of transport.|the fastest|faster|more fast
+Train tickets are ___ than bus tickets.|more expensive|expensiver|most expensive
+good – better – ___|the best|the goodest|the most good
+bad – worse – ___|the worst|the baddest|the most bad
+Our new area isn’t ___ noisy as our old one.|as|so than|more
+Do you know where the bank ___?|is|does is|is it
+Could you tell me what time the store ___?|opens|does open|open it
+___ Red Sea is in the Middle East.|The|A|no article
+Let’s play ___ tennis after lunch.|no article|the|a`}
+};
+var SEC={W:"Words · مفردات",R:"Real Talk",G:"Grammar · قواعد",A:"الكل · All"};
+var app=document.getElementById("app"),st={};
+function shuf(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function parse(s){return s.split("\n").map(function(l){var p=l.split("|");return{q:p[0],a:p[1],o:shuf(p.slice(1)),}})}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+function home(){
+  st={};
+  var h='<h1>Super Goal 3</h1><p class="sub">الفصل الأول · اختر الوحدة وابدأ التدريب</p><div class="grid">';
+  for(var k in D){var n=0;["W","R","G"].forEach(function(s){n+=D[k][s].split("\n").length});
+    h+='<button class="u" onclick="go('+k+')"><b>'+k+'</b><span>'+D[k].t+'</span><br><small style="color:var(--mut)">'+n+' questions</small></button>'}
+  app.innerHTML=h+'</div>';
+}
+function go(u){location.hash="unit-"+u}
+function unit(u,sec){
+  sec=sec||"A";var d=D[u],pool=[];
+  (sec=="A"?["W","R","G"]:[sec]).forEach(function(s){pool=pool.concat(parse(d[s]))});
+  st={u:u,sec:sec,qs:shuf(pool),i:0,sc:0,done:false};
+  var h='<button class="back" onclick="location.hash=\'\'">‹ كل الوحدات</button><h1>Unit '+u+' · '+d.t+'</h1><div class="tabs">';
+  for(var s in SEC)h+='<button class="tab" aria-pressed="'+(s==sec)+'" onclick="unit('+u+',\''+s+'\')">'+SEC[s]+'</button>';
+  app.innerHTML=h+'</div><div id="qa"></div>';draw();
+}
+function draw(){
+  var qa=document.getElementById("qa"),q=st.qs[st.i];
+  if(!q){var p=Math.round(st.sc/st.qs.length*100);
+    qa.innerHTML='<div class="res"><div>النتيجة</div><div class="big">'+st.sc+' / '+st.qs.length+'</div><p>'+(p>=80?"ممتاز! 🌟":p>=50?"جيد، حاول مرة أخرى لتحسين النتيجة":"راجع الوحدة وأعد المحاولة 💪")+'</p><button class="btn p" onclick="unit('+st.u+',\''+st.sec+'\')">إعادة الاختبار</button></div>';return}
+  var h='<div class="meta"><span>سؤال '+(st.i+1)+' من '+st.qs.length+'</span><span>الدرجة: '+st.sc+'</span></div><div class="bar"><i style="width:'+(st.i/st.qs.length*100)+'%"></i></div><div class="q">'+esc(q.q)+'</div>';
+  q.o.forEach(function(o,i){h+='<button class="o" onclick="pick('+i+')">'+esc(o)+'</button>'});
+  qa.innerHTML=h+'<div class="fb" id="fb"></div><button class="btn p hide" id="nx" onclick="st.i++;draw()">التالي ›</button>';
+}
+function pick(i){
+  if(st.done)return;st.done=true;var q=st.qs[st.i],bs=document.querySelectorAll(".o"),right=q.o[i]==q.a;
+  if(right)st.sc++;
+  bs.forEach(function(b,j){if(q.o[j]==q.a)b.classList.add("ok");else if(j==i)b.classList.add("no")});
+  document.getElementById("fb").textContent=right?"✔ إجابة صحيحة":"✘ الإجابة الصحيحة: "+q.a;
+  document.getElementById("fb").style.color=right?"var(--ok)":"var(--no)";
+  var n=document.getElementById("nx");n.classList.remove("hide");n.textContent=st.i+1==st.qs.length?"عرض النتيجة":"التالي ›";
+  n.onclick=function(){st.i++;st.done=false;draw()};
+}
+function route(){var m=location.hash.match(/^#unit-([1-6])$/);if(m)unit(+m[1]);else home()}
+window.addEventListener("hashchange",route);route();
+</script>
+</body>
+</html>
